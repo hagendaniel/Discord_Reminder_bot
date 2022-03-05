@@ -33,14 +33,16 @@ toDoList = [] #Declaring an empty list which will contain the tasks
 newReminder1 = CreateReminder("11/03/2022 19:22", "End of the Ukranian war", 0)
 newReminder2 = CreateReminder("06/03/2022 23:59", "Kuni elindul az egyetemre", 0)
 newReminder3 = CreateReminder("23/07/2000 22:22", "Beginning of a trainsurfer's life", 0)
+newReminderFinal = CreateReminder(datetime.datetime.strptime("05/03/2022 22:39", '%d/%m/%Y %H:%M'), "Something to test on", 0)
 toDoList.append(newReminder1) #These tests were created on 5th March
 toDoList.append(newReminder2)
 toDoList.append(newReminder3)
+toDoList.append(newReminderFinal)
 
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.invisible) #sets the bot invisible, had to use it as someone always spammed it
+    #await client.change_presence(status=discord.Status.invisible) #sets the bot invisible, had to use it as someone always spammed it
     print(f'{client.user} has connected to Discord!')
 
     #def job():
@@ -169,12 +171,24 @@ async def on_message(message):
 
     #Sending msg at the given dates
 testdate=datetime.datetime(2022, 3, 5, 14, 9, 20)
-@tasks.loop(seconds=1.0)
+@tasks.loop(minutes=1.0)
 async def reminderMsg():
     message_channel = client.get_channel(949407663937163334)
-
-    if message_channel:
-        await message_channel.send("Fucking working fuck")
+    for i, reminder in enumerate(toDoList):
+        usersToPing = ""
+        currentDate = datetime.datetime.now().date()
+        currentTime= datetime.datetime.now().time()
+        currentFormattedTimeDate=datetime.datetime.strptime(str(currentDate.day)+"/"+str(currentDate.month)+"/"+str(currentDate.year)+" "+str(currentTime.hour)+":"+str(currentTime.minute), '%d/%m/%Y %H:%M')
+        if (currentFormattedTimeDate+datetime.timedelta(minutes=2)==reminder.dateToReminder):
+            for x in toDoList[i].subscribedUsers:
+                usersToPing += "<@" + str(x) + "> "
+            if message_channel:
+                await message_channel.send(f"{toDoList[i]} {usersToPing}")
+        else:
+            pass
+    pass
+    #if message_channel:
+    #    await message_channel.send("Fucking working fuck")
 
 #@tasks.loop(seconds=5.0, count=5)
 #async def slow_count():
