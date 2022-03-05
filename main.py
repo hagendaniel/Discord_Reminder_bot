@@ -1,6 +1,10 @@
 import discord
+from discord.ext import tasks, commands
 import datetime
 import json
+import asyncio
+#import schedule
+#import time
 
 class ReminderClass:
     def __init__(self, dateNow, dateToReminder, contentReminder, userID):
@@ -38,6 +42,10 @@ toDoList.append(newReminder3)
 async def on_ready():
     await client.change_presence(status=discord.Status.invisible) #sets the bot invisible, had to use it as someone always spammed it
     print(f'{client.user} has connected to Discord!')
+
+    #def job():
+    #    print("I'm working")
+    #schedule.every(10).seconds.do(job)
 
 @client.event
 async def on_message(message):
@@ -159,5 +167,18 @@ async def on_message(message):
             usersToPing+="<@"+str(x)+"> "
         await message.channel.send(f"{toDoList[int(idTestremind.content)-1]} {usersToPing}")
 
+    #Sending msg at the given dates
+testdate=datetime.datetime(2022, 3, 5, 14, 9, 20)
+@tasks.loop(seconds=1.0)
+async def reminderMsg():
+    message_channel = client.get_channel(949407663937163334)
+    if message_channel:
+        await message_channel.send("Fucking working fuck")
+
+#@tasks.loop(seconds=5.0, count=5)
+#async def slow_count():
+#    print(slow_count.current_loop)
+
+reminderMsg.start()
 
 client.run(TOKEN)
