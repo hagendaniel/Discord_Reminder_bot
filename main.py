@@ -1,5 +1,6 @@
 import discord
 import datetime
+import json
 
 class ReminderClass:
     def __init__(self, dateNow, dateToReminder, contentReminder, userID):
@@ -18,7 +19,11 @@ def CreateReminder(dateToReminder, contentOfReminder, userID):
 
 #activity = discord.Activity(name='the sound of silence', type=discord.ActivityType.listening)
 client = discord.Client()
-TOKEN = "OTQ1ODEyMDc4NTIwODQwMTky.YhVmIw.G8792_aUBxzVkClj5q79tJdUL0Y"
+
+with open('config.json') as config_file:
+    data = json.load(config_file)
+
+TOKEN = data['token']
 
 toDoList = [] #Declaring an empty list which will contain the tasks
 newReminder1 = CreateReminder("11/03/2022 19:22", "End of the Ukranian war", 0)
