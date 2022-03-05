@@ -172,6 +172,7 @@ testdate=datetime.datetime(2022, 3, 5, 14, 9, 20)
 @tasks.loop(seconds=1.0)
 async def reminderMsg():
     message_channel = client.get_channel(949407663937163334)
+
     if message_channel:
         await message_channel.send("Fucking working fuck")
 
