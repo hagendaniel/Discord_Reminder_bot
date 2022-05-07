@@ -54,10 +54,6 @@ async def on_ready():
     reminderMsg.start()
     slow_count.start()
 
-    #def job():
-    #    print("I'm working")
-    #schedule.every(10).seconds.do(job)
-
 @client.event
 async def on_message(message):
     print(str(message.author)+": "+str(message.content))
@@ -87,7 +83,7 @@ async def on_message(message):
 
         #Available commands
         if message.content.lower().startswith('hey kazo, show command list'):
-            await message.channel.send("Available commands:\n------------------------\nShow all reminders\nShow my reminders\nSubscribe to a reminder\nUnsubscribe from a reminder\nCreate a reminder\nRemove a reminder\nUpdate a reminder\nDelete all reminders and just die instead")
+            await message.channel.send("Available commands:\n------------------------\nShow all reminders\nShow my reminders\nSubscribe to a reminder\nUnsubscribe from a reminder\nCreate a reminder\nRemove a reminder\nUpdate a reminder\nDelete all reminders")
 
         #Show all reminders
         if message.content.lower().startswith('hey kazo, show all reminders'):
@@ -108,12 +104,6 @@ async def on_message(message):
         if message.content.lower().startswith('hey kazo, create a reminder'):
             await message.channel.send("Title of the reminder:")
             response = await client.wait_for("message")
-            """if response.content == 'yes':
-                await message.channel.send('You said yes.')
-            elif response.content == 'no':
-                await message.channel.send('You said no.')
-            else:
-                await message.channel.send("That isn't a valid response.")"""
             title = response.content
             id = response.author.id
             await message.channel.send("Deadline of the reminder (DD/MM/YYYY HH:MM):")
@@ -177,7 +167,7 @@ async def on_message(message):
         #Delete all reminders
         if message.content.lower().startswith('hey kazo, delete all reminders'):
             toDoList.clear()
-            await message.channel.send("Deleted all the reminders, you can die now in peace.")
+            await message.channel.send("Deleted all the reminders.")
 
         #Subscribe to a reminder
         if message.content.lower().startswith('hey kazo, subscribe to a reminder'):
@@ -239,13 +229,9 @@ async def reminderMsg():
         else:
             pass
     pass
-    #if message_channel:
-    #    await message_channel.send("Fucking working fuck")
 
 @tasks.loop(seconds=5.0, count=5) #demonstration on how the tasks.loop works
 async def slow_count():
     print(slow_count.current_loop)
-
-#reminderMsg.start()
 
 client.run(TOKEN)
