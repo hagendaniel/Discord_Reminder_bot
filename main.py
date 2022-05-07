@@ -131,7 +131,7 @@ async def on_message(message):
                 await message.channel.send(f"Invalid input, try again")
 
         #Removing a reminder
-        if message.content.startswith('hey kazo, remove a reminder'):
+        if message.content.lower().startswith('hey kazo, remove a reminder'):
             toPrint = "The available reminders are:\n----------------------\n"
             i = 0
             while i < len(toDoList):
@@ -146,7 +146,7 @@ async def on_message(message):
             toDoList.remove(toDoList[int(response.content)-1])
 
         #Modifying a reminder
-        if message.content.startswith('hey kazo, update a reminder'):
+        if message.content.lower().startswith('hey kazo, update a reminder'):
             toPrint = "The available reminders are:\n----------------------\n"
             i = 0
             while i < len(toDoList):
@@ -175,12 +175,12 @@ async def on_message(message):
                         await message.channel.send(f"Invalid user input, try again, or type 'Hey Kazo?' to get some help")
 
         #Delete all reminders
-        if message.content.startswith('hey kazo, delete all reminders'):
+        if message.content.lower().startswith('hey kazo, delete all reminders'):
             toDoList.clear()
             await message.channel.send("Deleted all the reminders, you can die now in peace.")
 
         #Subscribe to a reminder
-        if message.content.startswith('hey kazo, subscribe to a reminder'):
+        if message.content.lower().startswith('hey kazo, subscribe to a reminder'):
             toPrint = "The available reminders are:\n----------------------\n"
             i = 0
             while i < len(toDoList):
@@ -193,7 +193,7 @@ async def on_message(message):
             await message.channel.send(f"You successfully subscribed to {toDoList[int(idToSubscribe.content)-1]}")
 
         #Unsubscribe from a reminder
-        if message.content.startswith('hey kazo, unsubscribe from a reminder'):
+        if message.content.lower().startswith('hey kazo, unsubscribe from a reminder'):
             toPrint = "Your subscriptions are:\n----------------------\n"
             i = 0
             while i < len(toDoList):
@@ -207,7 +207,7 @@ async def on_message(message):
             await message.channel.send(f"You successfully unsubscribed from {toDoList[int(idToUnSubscribe.content)-1]}")
 
         #testreminder
-        if message.content.startswith('testreminder'):
+        if message.content.lower().startswith('testreminder'):
             await message.channel.send("Which?")
             idTestremind = await client.wait_for("message")
             usersToPing=""
@@ -226,6 +226,12 @@ async def reminderMsg():
         currentTime= datetime.datetime.now().time()
         currentFormattedTimeDate=datetime.datetime.strptime(str(currentDate.day)+"/"+str(currentDate.month)+"/"+str(currentDate.year)+" "+str(currentTime.hour)+":"+str(currentTime.minute), '%d/%m/%Y %H:%M')
         if (currentFormattedTimeDate+datetime.timedelta(minutes=2)==reminder.dateToReminder):
+            for x in toDoList[i].subscribedUsers:
+                usersToPing += "<@" + str(x) + "> "
+            if message_channel:
+                await message_channel.send(f"{toDoList[i]} {usersToPing}")
+
+        elif (currentFormattedTimeDate==reminder.dateToReminder):
             for x in toDoList[i].subscribedUsers:
                 usersToPing += "<@" + str(x) + "> "
             if message_channel:
